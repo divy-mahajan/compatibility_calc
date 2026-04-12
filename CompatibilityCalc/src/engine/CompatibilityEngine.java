@@ -8,13 +8,14 @@ import java.util.*;
 public class CompatibilityEngine {
 
     // 🔹 Main method
-    public int calculate(Person p1, Person p2) {
+    public CompatibilityResult calculate(Person p1, Person p2) {
 
         List<Trait> t1 = p1.getTraits();
         List<Trait> t2 = p2.getTraits();
 
         double totalScore = 0;
         double maxScore = 0;
+        int[] dimensionScores = new int[t1.size()];
 
         for (int i = 0; i < t1.size(); i++) {
 
@@ -23,6 +24,7 @@ public class CompatibilityEngine {
 
             double score = calculateDimensionScore(trait1, trait2);
             double weight = getWeight(trait1.getName());
+            dimensionScores[i] = (int) Math.round(score);
 
             totalScore += score * weight;
             maxScore += 10 * weight;
@@ -38,8 +40,9 @@ public class CompatibilityEngine {
 
         // 🔹 Final score
         int finalScore = (int) Math.round((totalScore / maxScore) * 95 + bonus);
+        finalScore = Math.min(100, finalScore);
 
-        return Math.min(100, finalScore);
+        return new CompatibilityResult(p1, p2, finalScore, dimensionScores);
     }
 
     // 🔹 Dimension score

@@ -2,6 +2,8 @@ import db.DBConnection;
 import engine.*;
 import model.Trait;
 import model.Person;
+import engine.CompatibilityEngine;
+import engine.CompatibilityResult;
 
 import java.sql.Connection;
 import java.util.*;
@@ -51,9 +53,6 @@ public class Main {
         PersonalityEngine pe = new PersonalityEngine();
         String code = pe.deriveCode(answers, qb);
 
-        System.out.println("=== Personality Result ===");
-        System.out.println("Personality Code: " + code);
-
 
         Person p1 = new Person("Alice");
         Person p2 = new Person("Bob");
@@ -66,9 +65,10 @@ public class Main {
         p2.addTrait(new Trait("empathy", 9, "high-combined"));
 
         CompatibilityEngine ce = new CompatibilityEngine();
-        int score = ce.calculate(p1, p2);
+        CompatibilityResult result = ce.calculate(p1, p2);
 
-        System.out.println("Compatibility Score: " + score);
+// Print
+        result.printResult();
         DBConnection.closeConnection();
     }
 }
