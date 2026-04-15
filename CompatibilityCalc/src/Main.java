@@ -1,74 +1,96 @@
-import db.DBConnection;
 import engine.*;
-import model.Trait;
-import model.Person;
-import engine.CompatibilityEngine;
-import engine.CompatibilityResult;
+import model.*;
 
-import java.sql.Connection;
 import java.util.*;
 
 public class Main {
 
     public static void main(String[] args) {
 
-        // 🔹 Step 1: DB Connection
-        Connection conn = DBConnection.getConnection();
-
-        if (conn != null) {
-            System.out.println("✓ Connection successful — DB is live.");
-        } else {
-            System.out.println("✗ Connection failed — check errors above.");
-        }
-
-        System.out.println("\n--- Trait Test ---");
-        Trait t = new Trait("social", 8, "similar");
-        System.out.println(t.getName());
-        System.out.println(t.getValue());
-        System.out.println(t.getComparisonMode());
-
-        // 🔹 Step 2: QuestionBank
+        // 🔹 Step 1: Load questions
         QuestionBank qb = new QuestionBank();
-        List<Question> qList = qb.getRandomQuestions(10);
+        List<Question> questions = qb.getRandomQuestions(10);
 
-        // 🔹 Step 3: Simulate Answers
-        Map<String, Integer> answers = new HashMap<>();
+        // 🔹 Step 2: Simulate answers (random for testing)
+        Map<String, Integer> answers1 = new HashMap<>();
+        Map<String, Integer> answers2 = new HashMap<>();
+
         Random rand = new Random();
 
-        System.out.println("\n--- Questions & Answers ---");
+        for (Question q : questions) {
 
-        for (Question q : qList) {
-            System.out.println(q.getId() + ": " + q.getText());
+            int optionIndex1 = rand.nextInt(q.getOptions().length);
+            int optionIndex2 = rand.nextInt(q.getOptions().length);
 
-            int choice = rand.nextInt(3); // 0,1,2
-            int value = q.getValueForOption(choice);
+            int value1 = q.getValueForOption(optionIndex1);
+            int value2 = q.getValueForOption(optionIndex2);
 
-            answers.put(q.getId(), value);
-
-            System.out.println("Chosen: " + q.getOptions()[choice] + " (" + value + ")");
-            System.out.println();
+            answers1.put(q.getDimension(), value1);
+            answers2.put(q.getDimension(), value2);
         }
+
+        // 🔹 Step 3: Build traits
+        List<Trait> traits1 = buildTraits(answers1);
+        List<Trait> traits2 = buildTraits(answers2);
 
         // 🔹 Step 4: Personality Engine
         PersonalityEngine pe = new PersonalityEngine();
-        String code = pe.deriveCode(answers, qb);
 
+        String code1 = pe.deriveCode(answers1, qb);
+        String code2 = pe.deriveCode(answers2, qb);
 
+        System.out.println("Person 1 Code: " + code1);
+        System.out.println("Person 2 Code: " + code2);
+
+        System.out.println("Archetype 1: " + pe.getArchetype(code1));
+        System.out.println("Archetype 2: " + pe.getArchetype(code2));
+
+        // 🔹 Step 5: Create Persons
         Person p1 = new Person("Alice");
         Person p2 = new Person("Bob");
 
+        traits1.forEach(p1::addTrait);
+        traits2.forEach(p2::addTrait);
 
-        p1.addTrait(new Trait("social", 8, "similar"));
-        p2.addTrait(new Trait("social", 6, "similar"));
+        p1.setPersonalityCode(code1);
+        p2.setPersonalityCode(code2);
 
-        p1.addTrait(new Trait("empathy", 7, "high-combined"));
-        p2.addTrait(new Trait("empathy", 9, "high-combined"));
-
+        // 🔹 Step 6: Compatibility Engine
         CompatibilityEngine ce = new CompatibilityEngine();
         CompatibilityResult result = ce.calculate(p1, p2);
 
-// Print
+        // 🔹 Step 7: Print Result
         result.printResult();
-        DBConnection.closeConnection();
+    }
+
+    // 🔹 Helper method to build traits
+    private static List<Trait> buildTraits(Map<String, Integer> answers) {
+
+        String[][] TRAIT_CONFIG = {
+                {"social", "similar"},
+                {"perceiving", "similar"},
+                {"empathy", "high-combined"},
+                {"creativity", "similar"},
+                {"ambition", "high-combined"},
+                {"adventure", "similar"},
+                {"conflict", "complementary"},
+                {"learning", "similar"},
+                {"decision", "similar"},
+                {"schedule", "similar"}
+        };
+
+        List<Trait> traits = new ArrayList<>();
+
+        for (String[] config : TRAIT_CONFIG) {
+
+            String name = config[0];
+            String mode = config[1];
+
+            int value = answers.getOrDefault(name, 5);
+
+            traits.add(new Trait(name, value, mode));
+        }
+
+        return traits;
     }
 }

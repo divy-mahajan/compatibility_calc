@@ -16,6 +16,15 @@ public class CompatibilityResult {
         this.score=score;
         this.dimensionScores=dimensionScores;
     }
+    public Person getPerson1(){
+        return p1;
+    }
+    public Person getPerson2(){
+        return p2;
+    }
+    public int[] getDimensionScores(){
+        return dimensionScores;
+    }
     public String getLabel(){
         if (score <= 39) {
             return "Challenging pairing";
@@ -49,8 +58,6 @@ public class CompatibilityResult {
 
         System.out.println("\n===== Compatibility Result =====");
 
-        System.out.println("Person 1: " + p1.getName());
-        System.out.println("Person 2: " + p2.getName());
 
         System.out.println("\nScore: " + score + "/100");
         System.out.println("Label: " + getLabel());
@@ -68,6 +75,9 @@ public class CompatibilityResult {
         }
 
         System.out.println("================================\n");
+    }
+    public int getScore() {
+        return score;
     }
 
 }
