@@ -114,7 +114,56 @@ public class ResultController {
         worker.execute();
     }
 
-    private List<Trait> buildTraits(Map<String, Integer> answers) {
+    private List<Trait> buildTraits(Map<String, Integer> answers, QuestionBank qb) {
+
+    // Group answers by dimension
+    Map<String, List<Integer>> dimValues = new HashMap<>();
+
+    for (Question q : qb.getAll()) {
+        if (answers.containsKey(q.getId())) {
+            dimValues
+                .computeIfAbsent(q.getDimension(), k -> new ArrayList<>())
+                .add(answers.get(q.getId()));
+        }
+    }
+
+    // Dimension → Trait mapping
+    Map<String, String> dimToTrait = Map.of(
+        "E_I", "social",
+        "S_N", "perceiving",
+        "F_T", "empathy",
+        "P_J", "schedule"
+    );
+
+    List<Trait> traits = new ArrayList<>();
+
+    for (String[] config : TRAIT_CONFIG) {
+
+        String traitName = config[0];
+        String mode = config[1];
+
+        // Find corresponding dimension
+        String dim = dimToTrait.entrySet().stream()
+                .filter(e -> e.getValue().equals(traitName))
+                .map(Map.Entry::getKey)
+                .findFirst()
+                .orElse(null);
+
+        int value = 5; // default
+
+        if (dim != null && dimValues.containsKey(dim)) {
+            List<Integer> vals = dimValues.get(dim);
+
+            value = (int) Math.round(
+                    vals.stream().mapToInt(i -> i).average().orElse(5)
+            );
+        }
+
+        traits.add(new Trait(traitName, value, mode));
+    }
+
+    return traits;
+} {
 
         List<Trait> traits = new ArrayList<>();
 
