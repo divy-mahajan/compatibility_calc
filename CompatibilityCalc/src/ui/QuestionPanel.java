@@ -117,9 +117,9 @@ public class QuestionPanel extends JPanel {
                 int value = q.getValueForOption(i);
 
                 if (currentPerson == 0) {
-                    answers1.merge(q.getDimension(), value, Integer::sum);
+                    answers1.put(q.getId(), value);
                 } else {
-                    answers2.merge(q.getDimension(), value, Integer::sum);
+                    answers2.put(q.getId(), value);
                 }
                 break;
             }
