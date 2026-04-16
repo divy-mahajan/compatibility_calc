@@ -39,7 +39,7 @@ public class CompatibilityEngine {
         int bonus = (creativityDiff <= 2) ? 5 : 0;
 
         // 🔹 Final score
-        int finalScore = (int) Math.round((totalScore / maxScore) * 95 + bonus);
+        int finalScore = (int) Math.round((totalScore / maxScore) * 100 + bonus);
         finalScore = Math.min(100, finalScore);
 
         return new CompatibilityResult(p1, p2, finalScore, dimensionScores);
