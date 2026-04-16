@@ -1,112 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Compatibility Calculator</title>
-  <link rel="stylesheet" href="style.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Compatibility Calculator</title>
+    <!-- Linking the CSS file -->
+    <link rel="stylesheet" href="./compatibilitycalculator.netlify.app/assets/index-BpzGiJfq.css">
+    <!-- Local Google Fonts -->
+    <link rel="stylesheet" href="./fonts.googleapis.com/css2.css">
 </head>
 <body>
-
-<!-- ══════════════════════════════════════════
-     PAGE 1 — NAME ENTRY
-══════════════════════════════════════════ -->
-<div class="card page active" id="page-names">
-  <div class="brand">
-    <div class="brand-pill">✦ personality quiz</div>
-    <h1>Compatibility<br>Calculator</h1>
-    <p>Answer 10 questions each and discover<br>how well you truly connect.</p>
-  </div>
-
-  <div class="error-msg" id="name-error"></div>
-
-  <div class="input-group">
-    <label for="name1">Person 1</label>
-    <input type="text" id="name1" placeholder="Enter first name" maxlength="50" autocomplete="off" />
-  </div>
-
-  <div class="input-group">
-    <label for="name2">Person 2</label>
-    <input type="text" id="name2" placeholder="Enter first name" maxlength="50" autocomplete="off" />
-  </div>
-
-  <button class="btn" onclick="startTest()">Start the Test →</button>
-</div>
-
-<!-- ══════════════════════════════════════════
-     PAGE 2 — QUESTIONS
-══════════════════════════════════════════ -->
-<div class="card page" id="page-questions">
-  <div class="progress-wrap">
-    <div class="progress-meta">
-      <span class="progress-person" id="progress-person">Person 1</span>
-      <span class="progress-count" id="progress-count">1 / 10</span>
-    </div>
-    <div class="progress-bar">
-      <div class="progress-fill" id="progress-fill" style="width:10%"></div>
-    </div>
-  </div>
-
-  <p class="question-text" id="question-text">Loading question...</p>
-
-  <div class="options" id="options-container"></div>
-
-  <button class="btn" id="next-btn" onclick="handleNext()" disabled>Next →</button>
-</div>
-
-<!-- ══════════════════════════════════════════
-     PAGE 3 — RESULT
-══════════════════════════════════════════ -->
-<div class="card page" id="page-result">
-
-  <div class="loading" id="loading">
-    <div class="spinner"></div>
-    <p>Calculating compatibility…</p>
-  </div>
-
-  <div id="result-content" style="display:none">
-    <!-- Score ring -->
-    <div class="score-ring-wrap">
-      <div class="score-ring">
-        <svg viewBox="0 0 160 160">
-          <defs>
-            <linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%"   stop-color="#c8b4fa"/>
-              <stop offset="100%" stop-color="#f9a8d4"/>
-            </linearGradient>
-          </defs>
-          <circle class="ring-bg" cx="80" cy="80" r="70"/>
-          <circle class="ring-fg" id="ring-fg" cx="80" cy="80" r="70"
-                  stroke-dasharray="439.8"
-                  stroke-dashoffset="439.8"/>
-        </svg>
-        <div class="score-center">
-          <span class="score-num" id="score-num">0</span>
-          <span class="score-label">/ 100</span>
-        </div>
-      </div>
-    </div>
-
-    <p class="compat-label" id="compat-label"></p>
-    <p class="compat-insight" id="compat-insight"></p>
-
-    <hr class="divider" />
-
-    <!-- Personality codes -->
-    <div class="personality-row" id="personality-row"></div>
-
-    <hr class="divider" />
-
-    <!-- Trait breakdown -->
-    <p class="breakdown-title">Dimension Breakdown</p>
-    <div id="trait-breakdown"></div>
-
-    <hr class="divider" />
-
-    <button class="btn btn-ghost" onclick="restart()">← Start Over</button>
-  </div>
-</div>
-
-<script src="script.js"></script>
+    <div id="root"></div>
+    <!-- The main application entry point -->
+    <script type="module" src="./compatibilitycalculator.netlify.app/assets/index-D3BysoYR.js"></script>
 </body>
 </html>
