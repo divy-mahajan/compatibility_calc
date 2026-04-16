@@ -43,13 +43,20 @@ public class ResultController {
             @Override
             protected CompatibilityResult doInBackground() {
 
-                // 🔹 Step 1: Traits
-                List<Trait> traits1 = buildTraits(answers1);
-                List<Trait> traits2 = buildTraits(answers2);
+              protected CompatibilityResult doInBackground() {
 
-                // 🔹 Step 2: Personality
-                PersonalityEngine pe = new PersonalityEngine();
-                QuestionBank qb = new QuestionBank(); // REQUIRED
+    // Create QB FIRST
+    QuestionBank qb = new QuestionBank();
+
+    //  Step 1: Traits
+    List<Trait> traits1 = buildTraits(answers1, qb);
+    List<Trait> traits2 = buildTraits(answers2, qb);
+
+    // Step 2: Personality
+    PersonalityEngine pe = new PersonalityEngine();
+
+    String code1 = pe.deriveCode(answers1, qb);
+    String code2 = pe.deriveCode(answers2, qb);
 
                 String code1 = pe.deriveCode(answers1, qb);
                 String code2 = pe.deriveCode(answers2, qb);
